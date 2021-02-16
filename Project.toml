@@ -1,0 +1,13 @@
+name = "Paraml"
+uuid = "0a452357-00e2-49ec-9da5-12084d27edbc"
+authors = ["mcmcgrath13 <m.c.mcgrath13@gmail.com> and contributors"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
