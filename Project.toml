@@ -3,6 +3,9 @@ uuid = "0a452357-00e2-49ec-9da5-12084d27edbc"
 authors = ["mcmcgrath13 <m.c.mcgrath13@gmail.com> and contributors"]
 version = "0.1.0"
 
+[deps]
+YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
+
 [compat]
 julia = "1"
 

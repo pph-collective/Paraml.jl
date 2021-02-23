@@ -1,0 +1,199 @@
+demographics:
+  cat:
+    prob_happy: 1.0
+    ocean:
+      prob_happy: 1.0
+      age_bins:
+        2:
+          prob: 0.25
+          age: 8
+        3:
+          prob: 0.35
+          age: 12
+        1:
+          prob: 0.4
+          age: 3
+      num: 10
+      color: "blue"
+    age_bins:
+      2:
+        prob: 0.25
+        age: 8
+      3:
+        prob: 0.35
+        age: 12
+      1:
+        prob: 0.4
+        age: 3
+    num: 10
+    color: "blue"
+    sky:
+      prob_happy: 1.0
+      age_bins:
+        2:
+          prob: 0.25
+          age: 8
+        3:
+          prob: 0.35
+          age: 12
+        1:
+          prob: 0.4
+          age: 3
+      num: 10
+      color: "blue"
+    barn:
+      prob_happy: 0.7
+      age_bins:
+        2:
+          prob: 0.25
+          age: 14
+        3:
+          prob: 0.35
+          age: 12
+        1:
+          prob: 0.4
+          age: 3
+      num: 2
+      color: "indigo"
+  turtle:
+    prob_happy: 1.0
+    ocean:
+      prob_happy: 0.95
+      age_bins:
+        2:
+          prob: 0.25
+          age: 8
+        3:
+          prob: 0.35
+          age: 12
+        1:
+          prob: 0.4
+          age: 3
+      num: 50
+      color: "indigo"
+    age_bins:
+      2:
+        prob: 0.25
+        age: 8
+      3:
+        prob: 0.35
+        age: 12
+      1:
+        prob: 0.4
+        age: 3
+    num: 10
+    color: "blue"
+    sky:
+      prob_happy: 1.0
+      age_bins:
+        2:
+          prob: 0.25
+          age: 8
+        3:
+          prob: 0.35
+          age: 12
+        1:
+          prob: 0.4
+          age: 3
+      num: 10
+      color: "blue"
+    barn:
+      prob_happy: 1.0
+      age_bins:
+        2:
+          prob: 0.25
+          age: 8
+        3:
+          prob: 0.35
+          age: 12
+        1:
+          prob: 0.4
+          age: 3
+      num: 10
+      color: "blue"
+  dog:
+    prob_happy: 1.0
+    ocean:
+      prob_happy: 1.0
+      age_bins:
+        2:
+          prob: 0.25
+          age: 8
+        3:
+          prob: 0.35
+          age: 12
+        1:
+          prob: 0.4
+          age: 3
+      num: 10
+      color: "blue"
+    age_bins:
+      2:
+        prob: 0.25
+        age: 8
+      3:
+        prob: 0.35
+        age: 12
+      1:
+        prob: 0.4
+        age: 3
+    num: 10
+    color: "blue"
+    sky:
+      prob_happy: 1.0
+      age_bins:
+        2:
+          prob: 0.25
+          age: 8
+        3:
+          prob: 0.35
+          age: 12
+        1:
+          prob: 0.4
+          age: 3
+      num: 10
+      color: "blue"
+    barn:
+      prob_happy: 1.0
+      age_bins:
+        2:
+          prob: 0.25
+          age: 8
+        3:
+          prob: 0.35
+          age: 12
+        1:
+          prob: 0.4
+          age: 3
+      num: 10
+      color: "blue"
+classes:
+  locations:
+    - "ocean"
+    - "barn"
+    - "sky"
+  animals:
+    cat:
+      goes: "meow"
+      friends_with:
+        - "cat"
+        - "dog"
+      is_mammal: true
+    turtle:
+      goes: "gurgle"
+      friends_with:
+        - "dog"
+        - "turtle"
+      is_mammal: false
+    dog:
+      goes: "woof"
+      friends_with:
+        - "dog"
+        - "turtle"
+        - "cat"
+      is_mammal: true
+neighbors:
+  blue_buddies:
+    distance: 90
+    location_1: "ocean"
+    location_2: "sky"
