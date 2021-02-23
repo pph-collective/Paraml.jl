@@ -6,7 +6,7 @@ CurrentModule = Paraml
 
 ## Table of Contents
 
-*Note:* README internal links only work on [GitHub](https://github.com/marshall-lab/paraml)
+*Note:* README internal links only work on [GitHub](https://github.com/marshall-lab/Paraml)
 
 1. [Motivation](#Motivation)
 2. [Getting Started](#Getting-Started)
@@ -19,7 +19,7 @@ CurrentModule = Paraml
 4. [API](#API)
 
 ## Motivation
-paraml is a spinoff from [TITAN](https://github.com/marshall-lab/TITAN), an agent based model.  We have many parameters in that model, many of which are not used in a given run. paraml addresses the following pain points we had:
+Paraml is a spinoff from [TITAN](https://github.com/marshall-lab/TITAN), an agent based model.  We have many parameters in that model, many of which are not used in a given run. Paraml addresses the following pain points we had:
 
 * Parameters often weren't formally defined/described anywhere - some had comments, some were hopefully named idiomatically. This caused issues onboarding new people to using the model.
 * Parameters were statically defined/hard coded, but often we wanted them to be dynamic.
@@ -29,7 +29,7 @@ paraml is a spinoff from [TITAN](https://github.com/marshall-lab/TITAN), an agen
 * Reproducibility of the run is key - must be able to re-run the model with the same params.
 * We needed to be able to create common settings which described a specific world the model runs in and let users use those, but also override parameters as they needed for their run of the model.
 
-How paraml addresses these:
+How Paraml addresses these:
 * Parameter definitions require defaults
 * Can add descriptions of parameters inline
 * A small type system allows validation of params, as well as flexibility to define interfaces for params
@@ -42,12 +42,12 @@ How paraml addresses these:
 ### Installation
 
 ```
-pip install paraml
+pip install Paraml
 ```
 
-### Running paraml
+### Running Paraml
 
-The entrypoint for running paraml is `paraml.create_params`.  This takes the parameter definitions, parameter files, and some options and returns a dictionary of the validated and computed parameters.
+The entrypoint for running Paraml is `Paraml.create_params`.  This takes the parameter definitions, parameter files, and some options and returns a dictionary of the validated and computed parameters.
 
 **Args:**
   * `def_path`: A yaml file or directory of yaml files containing the parameter definitions (see [Parameter Definition](#parameter-definition)).
@@ -60,8 +60,8 @@ The entrypoint for running paraml is `paraml.create_params`.  This takes the par
 
 
 **Example usage:**
-```python
-from paraml import create_params
+```jl
+using Paraml
 
 def_path = "my/params/dir" # directory of the params definition files
 base_params = "base/params.yaml" # file location of the first params
@@ -73,9 +73,9 @@ params = create_params(
   def_path,
   base_params,
   setting_params,
-  intervention_params,
-  out_path=out_path,
-  error_on_unused=True # if parameters are passed, but don't exist in the definition file, error
+  intervention_params;
+  out_path,
+  error_on_unused=true # if parameters are passed, but don't exist in the definition file, error
 )
 ```
 
@@ -294,7 +294,7 @@ The `description` is a free text field to provide context for the parameter item
 
 The `type` of a parameter definition dictates which other fields are required/used when parsing the definition.
 
-The types supported by paraml are:
+The types supported by Paraml are:
 * [`int`](#int)
 * [`float`](#float)
 * [`boolean`](#boolean)
@@ -472,7 +472,7 @@ name:
 
 Example usage:
 ```yml
-name: paraml
+name: Paraml
 ```
 
 #### `bin`
