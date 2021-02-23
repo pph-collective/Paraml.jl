@@ -8,14 +8,15 @@ CurrentModule = Paraml
 
 *Note:* README internal links only work on [GitHub](https://github.com/marshall-lab/paraml)
 
-1. [Motivation](#motivation)
-2. [Getting Started](#getting-started)
-    - [Installation](#installation)
-    - [Running paraml](#running-paraml)
-3. [Parameter Definition](#parameter-definition)
-    - [Required Keys](#required-keys)
-    - [Types](#types)
-    - [Using Classes](#using-classes)
+1. [Motivation](#Motivation)
+2. [Getting Started](#Getting-Started)
+    - [Installation](#Installation)
+    - [Running Paraml](#Running-Paraml)
+3. [Parameter Definition](#Parameter-Definition)
+    - [Required Keys](#Required-Keys)
+    - [Types](#Types)
+    - [Using Classes](#Using-Classes)
+4. [API](#API)
 
 ## Motivation
 paraml is a spinoff from [TITAN](https://github.com/marshall-lab/TITAN), an agent based model.  We have many parameters in that model, many of which are not used in a given run. paraml addresses the following pain points we had:
@@ -632,6 +633,7 @@ animals:
 
 The `classes` key as a root key of the parameter definitions takes on special meaning.  The parameters chosen in this section can be used to determine acceptable values in other sections of the params (via `enum` and `array` types), or to determine what params need to be created (via `sub-dict` type).
 
+## API
 
 ```@index
 ```
