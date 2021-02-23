@@ -14,4 +14,4 @@ makedocs(;
     pages = ["Home" => "index.md"],
 )
 
-deploydocs(; repo = "github.com/pph-collective/Paraml.jl")
+deploydocs(; repo = "github.com/pph-collective/Paraml.jl", devbranch = "main")
