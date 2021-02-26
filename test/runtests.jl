@@ -10,9 +10,8 @@ const DEF_PATH = "params/defs.yaml"
             DEF_PATH,
             "params/a.yaml",
             "params/b",
-            "params/c.yaml";
-            out_path = "params.yaml",
-        ) # TODO: remove the out_path
+            "params/c.yaml"
+        )
 
         @test haskey(params["classes"]["animals"], "cat")
         @test params["demographics"]["cat"]["barn"]["age_bins"][1]["age"] == 3

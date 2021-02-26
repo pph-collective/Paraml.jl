@@ -139,7 +139,7 @@ classes:
 # then has parameter definitions for each of those combinations
 demographics:
   type: sub-dict
-  description: "Parameters controlling population class level probabilities and behaviors"
+  description: Parameters controlling population class level probabilities and behaviors
   keys:
     - animals
     - locations
@@ -304,6 +304,7 @@ The types supported by Paraml are:
 * [`bin`](#bin)
 * [`sub-dict`](#sub-dict)
 * [`definition`](#definition)
+* [`keys`](#keys)
 
 #### `int`
 
@@ -490,7 +491,7 @@ Example definition:
 ```yml
 bins:
   type: bin
-  description: "Binned probabilities of frequencies"
+  description: Binned probabilities of frequencies
   fields:
     prob:
       type: float
@@ -532,10 +533,10 @@ bins:
 
 #### `sub-dict`
 
-Build a set of params for each key combination listed.  Requires use of `classes` root key.  The default should contain parameter definition items.  Can facet on up to two classes.
+Build a set of params for each key combination listed.  Requires use of `classes` root key.  The default should contain parameter definition items.  Can facet on an arbitrary number of classes.
 
 Required keys:
-* `keys` - which params under the `classes` root key should be sub-dicted off of
+* `keys` - which params under the `classes` root key should be sub-dict'ed off of
 
 Optional keys:
 * None
@@ -623,10 +624,74 @@ animals:
   sheep:
     goes: bah
     is_mammal: true
+    friends_with:
+      - pig
+      - sheep
   pig:
     is_mammal: true
   fish:
     goes: glugglug
+    friends_with:
+      - fish
+```
+
+#### `keys`
+
+Within the field definitions of a `definition` type, the `keys` type acts like an `array` type, but with the values limited to the keys that are ultimately definied in the params.
+
+Required keys:
+* None
+
+Optional keys:
+* None
+
+Example definition:
+```yml
+animals:
+  type: definition
+  description: Animals included in model
+  fields:
+    goes:
+      type: any
+      description: What noise does the animal make?
+      default: oink
+    is_mammal:
+      type: boolean
+      description: Is this animal a mammal
+      default: false
+    friends_with:
+      type: keys
+      desciption: What animals does this animal befriend
+  default:
+    cat:
+      goes: meow
+      is_mammal: true
+      friends_with:
+        - cat
+        - dog
+    dog:
+      goes: woof
+      is_mammal: true
+      friends_with:
+        - dog
+        - cat
+```
+
+Example usage:
+```yml
+animals:
+  sheep:
+    goes: bah
+    is_mammal: true
+    friends_with:
+      - pig
+      - sheep
+  pig:
+    is_mammal: true
+  fish:
+    goes: glugglug
+    friends_with:
+      - fish
 ```
 
 ### Using Classes
