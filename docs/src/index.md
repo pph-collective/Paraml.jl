@@ -6,32 +6,42 @@ CurrentModule = Paraml
 
 ## Table of Contents
 
-*Note:* README internal links only work on [GitHub](https://github.com/marshall-lab/Paraml)
-
-1. [Motivation](#Motivation)
-2. [Getting Started](#Getting-Started)
+- [Paraml](#Paraml)
+  - [Table of Contents](#Table-of-Contents)
+  - [Motivation](#Motivation)
+  - [Getting Started](#Getting-Started)
     - [Installation](#Installation)
     - [Running Paraml](#Running-Paraml)
-3. [Parameter Definition](#Parameter-Definition)
+  - [Parameter Definition](#Parameter-Definition)
     - [Required Keys](#Required-Keys)
     - [Types](#Types)
+      - [`int`](#int)
+      - [`float`](#float)
+      - [`boolean`](#boolean)
+      - [`array`](#array)
+      - [`enum`](#enum)
+      - [`any`](#any)
+      - [`bin`](#bin)
+      - [`sub-dict`](#sub-dict)
+      - [`definition`](#definition)
+      - [`keys`](#keys)
     - [Using Classes](#Using-Classes)
-4. [API](#API)
+  - [API](#API)
 
 ## Motivation
-Paraml is a spinoff from [TITAN](https://github.com/marshall-lab/TITAN), an agent based model.  We have many parameters in that model, many of which are not used in a given run. Paraml addresses the following pain points we had:
+Paraml is a spinoff of [TITAN](https://github.com/marshall-lab/TITAN), an agent based model.  We have a number of parameters in that model, many of which are not used in a given run. Paraml addresses the following pain points we had:
 
 * Parameters often weren't formally defined/described anywhere - some had comments, some were hopefully named idiomatically. This caused issues onboarding new people to using the model.
-* Parameters were statically defined/hard coded, but often we wanted them to be dynamic.
-* Parameters needed to be filled out/defined by non-technical researchers - shouldn't need to know how to code to create a parameter file.
-* Parameters need to have specific validation (e.g. a probability should be between 0 and 1, only `a` or `b` are expected values for parameter `y`), this was typically a run time failure - sometimes silent, sometimes explosive.
+* Parameters were statically defined/hard coded, but we often wanted them to be dynamic.
+* Parameters needed to be filled out/defined by non-technical researchers: users shouldn't need to know how to code to create a parameter file.
+* Parameters need to have specific validation (e.g. a probability should be between 0 and 1, only `a` or `b` are expected values for parameter `y`). This was typically a run time failure - sometimes silent, sometimes explosive.
 * If a user isn't using a feature of the model, they shouldn't have to worry about/carry around its parameters.
 * Reproducibility of the run is key - must be able to re-run the model with the same params.
 * We needed to be able to create common settings which described a specific world the model runs in and let users use those, but also override parameters as they needed for their run of the model.
 
 How Paraml addresses these:
 * Parameter definitions require defaults
-* Can add descriptions of parameters inline
+* Can add inline descriptions of parameters
 * A small type system allows validation of params, as well as flexibility to define interfaces for params
 * Parameter files only need to fill in what they want different from the defaults
 * Can save off the fully computed params, which can then be re-used at a later date
@@ -41,8 +51,8 @@ How Paraml addresses these:
 
 ### Installation
 
-```
-pip install Paraml
+```julia
+] add Paraml
 ```
 
 ### Running Paraml
@@ -50,8 +60,8 @@ pip install Paraml
 The entrypoint for running Paraml is `Paraml.create_params`.  This takes the parameter definitions, parameter files, and some options and returns a dictionary of the validated and computed parameters.
 
 **Args:**
-  * `def_path`: A yaml file or directory of yaml files containing the parameter definitions (see [Parameter Definition](#parameter-definition)).
-  * `*param_paths`: The remaining args are interpreted as parameter files.  They will be merged in order (last merged value prevails).
+  * `def_path`: A yaml file or directory of yaml files containing the parameter definitions (see [Parameter Definition](#Parameter-Definition)).
+  * `param_paths...`: The remaining args are interpreted as parameter files.  They will be merged in order (last merged value prevails).
   * `out_path`: Optional, if passed, save the computed parameters as a yaml to this location.
   * `error_on_unused`: Optional, if `True` throw an exception if there are parameters in `param_paths` that do not have a corresponding definition in the `def_path` definitions.
 
@@ -60,7 +70,7 @@ The entrypoint for running Paraml is `Paraml.create_params`.  This takes the par
 
 
 **Example usage:**
-```jl
+```julia
 using Paraml
 
 def_path = "my/params/dir" # directory of the params definition files
@@ -82,7 +92,7 @@ params = create_params(
 
 ## Parameter Definition
 
-The parameter definition language (PDL) provides expressions for defining input types, creation of types for the target application, and simple validation of input values.  The PDL itself is YAML and can be defined either in one file or a directory of yaml files. There can be multiple root keys in the parameter definition to namespace parameters by topic, and parameter definitions can be deeply nested for further organization of the params.  Only the `classes` key at the root of the definitions has special meaning (see [Using Classes](#using-classes)).
+The parameter definition language (PDL) provides expressions for defining input types, creation of types for the target application, and simple validation of input values.  The PDL itself is YAML and can be defined either in one file or a directory of yaml files. There can be multiple root keys in the parameter definition to namespace parameters by topic, and parameter definitions can be deeply nested for further organization of the params.  Only the `classes` key at the root of the definitions has special meaning (see [Using Classes](#Using-Classes)).
 
 **An example params definition:**
 ```yml
@@ -278,13 +288,13 @@ a:
     description: the type of a
 ```
 
-`classes` is also reserved as a root key (see [using classes](#using-classes) below)
+`classes` is also reserved as a root key (see [using classes](#Using-Classes) below)
 
 ### Required Keys
 
 Every parameter item must have the `type`, and `default` keys (`description` highly encouraged, but not required).
 
-See [Types](#types) for more information on the types and how they interact with the other keys.
+See [Types](#Types) for more information on the types and how they interact with the other keys.
 
 The `default` key should be a valid value given the rest of the definition.  The `default` key can include parameter definitions within it.  This is common with `sub-dict` param definitions.
 
