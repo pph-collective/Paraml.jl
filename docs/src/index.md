@@ -8,30 +8,42 @@ CurrentModule = Paraml
 
 *Note:* README internal links only work on [GitHub](https://github.com/marshall-lab/Paraml)
 
-1. [Motivation](#Motivation)
-2. [Getting Started](#Getting-Started)
-    - [Installation](#Installation)
-    - [Running Paraml](#Running-Paraml)
-3. [Parameter Definition](#Parameter-Definition)
-    - [Required Keys](#Required-Keys)
-    - [Types](#Types)
-    - [Using Classes](#Using-Classes)
-4. [API](#API)
+- [Paraml](#paraml)
+  - [Table of Contents](#table-of-contents)
+  - [Motivation](#motivation)
+  - [Getting Started](#getting-started)
+    - [Installation](#installation)
+    - [Running Paraml](#running-paraml)
+  - [Parameter Definition](#parameter-definition)
+    - [Required Keys](#required-keys)
+    - [Types](#types)
+      - [`int`](#int)
+      - [`float`](#float)
+      - [`boolean`](#boolean)
+      - [`array`](#array)
+      - [`enum`](#enum)
+      - [`any`](#any)
+      - [`bin`](#bin)
+      - [`sub-dict`](#sub-dict)
+      - [`definition`](#definition)
+      - [`keys`](#keys)
+    - [Using Classes](#using-classes)
+  - [API](#api)
 
 ## Motivation
-Paraml is a spinoff from [TITAN](https://github.com/marshall-lab/TITAN), an agent based model.  We have many parameters in that model, many of which are not used in a given run. Paraml addresses the following pain points we had:
+Paraml is a spinoff of [TITAN](https://github.com/marshall-lab/TITAN), an agent based model.  We have a number of parameters in that model, many of which are not used in a given run. Paraml addresses the following pain points we had:
 
 * Parameters often weren't formally defined/described anywhere - some had comments, some were hopefully named idiomatically. This caused issues onboarding new people to using the model.
-* Parameters were statically defined/hard coded, but often we wanted them to be dynamic.
-* Parameters needed to be filled out/defined by non-technical researchers - shouldn't need to know how to code to create a parameter file.
-* Parameters need to have specific validation (e.g. a probability should be between 0 and 1, only `a` or `b` are expected values for parameter `y`), this was typically a run time failure - sometimes silent, sometimes explosive.
+* Parameters were statically defined/hard coded, but we often wanted them to be dynamic.
+* Parameters needed to be filled out/defined by non-technical researchers: users shouldn't need to know how to code to create a parameter file.
+* Parameters need to have specific validation (e.g. a probability should be between 0 and 1, only `a` or `b` are expected values for parameter `y`). This was typically a run time failure - sometimes silent, sometimes explosive.
 * If a user isn't using a feature of the model, they shouldn't have to worry about/carry around its parameters.
 * Reproducibility of the run is key - must be able to re-run the model with the same params.
 * We needed to be able to create common settings which described a specific world the model runs in and let users use those, but also override parameters as they needed for their run of the model.
 
 How Paraml addresses these:
 * Parameter definitions require defaults
-* Can add descriptions of parameters inline
+* Can add inline descriptions of parameters
 * A small type system allows validation of params, as well as flexibility to define interfaces for params
 * Parameter files only need to fill in what they want different from the defaults
 * Can save off the fully computed params, which can then be re-used at a later date
