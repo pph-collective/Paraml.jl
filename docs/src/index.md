@@ -6,17 +6,15 @@ CurrentModule = Paraml
 
 ## Table of Contents
 
-*Note:* README internal links only work on [GitHub](https://github.com/marshall-lab/Paraml)
-
-- [Paraml](#paraml)
-  - [Table of Contents](#table-of-contents)
-  - [Motivation](#motivation)
-  - [Getting Started](#getting-started)
-    - [Installation](#installation)
-    - [Running Paraml](#running-paraml)
-  - [Parameter Definition](#parameter-definition)
-    - [Required Keys](#required-keys)
-    - [Types](#types)
+- [Paraml](#Paraml)
+  - [Table of Contents](#Table-of-Contents)
+  - [Motivation](#Motivation)
+  - [Getting Started](#Getting-Started)
+    - [Installation](#Installation)
+    - [Running Paraml](#Running-Paraml)
+  - [Parameter Definition](#Parameter-Definition)
+    - [Required Keys](#Required-Keys)
+    - [Types](#Types)
       - [`int`](#int)
       - [`float`](#float)
       - [`boolean`](#boolean)
@@ -27,8 +25,8 @@ CurrentModule = Paraml
       - [`sub-dict`](#sub-dict)
       - [`definition`](#definition)
       - [`keys`](#keys)
-    - [Using Classes](#using-classes)
-  - [API](#api)
+    - [Using Classes](#Using-Classes)
+  - [API](#API)
 
 ## Motivation
 Paraml is a spinoff of [TITAN](https://github.com/marshall-lab/TITAN), an agent based model.  We have a number of parameters in that model, many of which are not used in a given run. Paraml addresses the following pain points we had:
@@ -53,8 +51,8 @@ How Paraml addresses these:
 
 ### Installation
 
-```
-pip install Paraml
+```julia
+] add Paraml
 ```
 
 ### Running Paraml
@@ -62,8 +60,8 @@ pip install Paraml
 The entrypoint for running Paraml is `Paraml.create_params`.  This takes the parameter definitions, parameter files, and some options and returns a dictionary of the validated and computed parameters.
 
 **Args:**
-  * `def_path`: A yaml file or directory of yaml files containing the parameter definitions (see [Parameter Definition](#parameter-definition)).
-  * `*param_paths`: The remaining args are interpreted as parameter files.  They will be merged in order (last merged value prevails).
+  * `def_path`: A yaml file or directory of yaml files containing the parameter definitions (see [Parameter Definition](#Parameter-Definition)).
+  * `param_paths...`: The remaining args are interpreted as parameter files.  They will be merged in order (last merged value prevails).
   * `out_path`: Optional, if passed, save the computed parameters as a yaml to this location.
   * `error_on_unused`: Optional, if `True` throw an exception if there are parameters in `param_paths` that do not have a corresponding definition in the `def_path` definitions.
 
@@ -72,7 +70,7 @@ The entrypoint for running Paraml is `Paraml.create_params`.  This takes the par
 
 
 **Example usage:**
-```jl
+```julia
 using Paraml
 
 def_path = "my/params/dir" # directory of the params definition files
@@ -94,7 +92,7 @@ params = create_params(
 
 ## Parameter Definition
 
-The parameter definition language (PDL) provides expressions for defining input types, creation of types for the target application, and simple validation of input values.  The PDL itself is YAML and can be defined either in one file or a directory of yaml files. There can be multiple root keys in the parameter definition to namespace parameters by topic, and parameter definitions can be deeply nested for further organization of the params.  Only the `classes` key at the root of the definitions has special meaning (see [Using Classes](#using-classes)).
+The parameter definition language (PDL) provides expressions for defining input types, creation of types for the target application, and simple validation of input values.  The PDL itself is YAML and can be defined either in one file or a directory of yaml files. There can be multiple root keys in the parameter definition to namespace parameters by topic, and parameter definitions can be deeply nested for further organization of the params.  Only the `classes` key at the root of the definitions has special meaning (see [Using Classes](#Using-Classes)).
 
 **An example params definition:**
 ```yml
@@ -290,13 +288,13 @@ a:
     description: the type of a
 ```
 
-`classes` is also reserved as a root key (see [using classes](#using-classes) below)
+`classes` is also reserved as a root key (see [using classes](#Using-Classes) below)
 
 ### Required Keys
 
 Every parameter item must have the `type`, and `default` keys (`description` highly encouraged, but not required).
 
-See [Types](#types) for more information on the types and how they interact with the other keys.
+See [Types](#Types) for more information on the types and how they interact with the other keys.
 
 The `default` key should be a valid value given the rest of the definition.  The `default` key can include parameter definitions within it.  This is common with `sub-dict` param definitions.
 
