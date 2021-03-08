@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Home · Paraml.jl</title><link rel="canonical" href="https://pph-collective.github.io/Paraml.jl/"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit">Paraml.jl</span></div><form class="docs-search" action="search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li class="is-active"><a class="tocitem" href>Home</a><ul class="internal"><li><a class="tocitem" href="#Table-of-Contents"><span>Table of Contents</span></a></li><li><a class="tocitem" href="#Motivation"><span>Motivation</span></a></li><li><a class="tocitem" href="#Getting-Started"><span>Getting Started</span></a></li><li><a class="tocitem" href="#Parameter-Definition"><span>Parameter Definition</span></a></li><li><a class="tocitem" href="#API"><span>API</span></a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Home</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Home</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/pph-collective/Paraml.jl/blob/master/docs/src/index.md#L" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Paraml"><a class="docs-heading-anchor" href="#Paraml">Paraml</a><a id="Paraml-1"></a><a class="docs-heading-anchor-permalink" href="#Paraml" title="Permalink"></a></h1><h2 id="Table-of-Contents"><a class="docs-heading-anchor" href="#Table-of-Contents">Table of Contents</a><a id="Table-of-Contents-1"></a><a class="docs-heading-anchor-permalink" href="#Table-of-Contents" title="Permalink"></a></h2><ul><li><a href="#Paraml">Paraml</a><ul><li><a href="#Table-of-Contents">Table of Contents</a></li><li><a href="#Motivation">Motivation</a></li><li><a href="#Getting-Started">Getting Started</a><ul><li><a href="#Installation">Installation</a></li><li><a href="#Running-Paraml">Running Paraml</a></li></ul></li><li><a href="#Parameter-Definition">Parameter Definition</a><ul><li><a href="#Required-Keys">Required Keys</a></li><li><a href="#Types">Types</a><ul><li><a href="#int"><code>int</code></a></li><li><a href="#float"><code>float</code></a></li><li><a href="#boolean"><code>boolean</code></a></li><li><a href="#array"><code>array</code></a></li><li><a href="#enum"><code>enum</code></a></li><li><a href="#any"><code>any</code></a></li><li><a href="#bin"><code>bin</code></a></li><li><a href="#sub-dict"><code>sub-dict</code></a></li><li><a href="#definition"><code>definition</code></a></li><li><a href="#keys"><code>keys</code></a></li></ul></li><li><a href="#Using-Classes">Using Classes</a></li></ul></li><li><a href="#API">API</a></li></ul></li></ul><h2 id="Motivation"><a class="docs-heading-anchor" href="#Motivation">Motivation</a><a id="Motivation-1"></a><a class="docs-heading-anchor-permalink" href="#Motivation" title="Permalink"></a></h2><p>Paraml is a spinoff of <a href="https://github.com/marshall-lab/TITAN">TITAN</a>, an agent based model.  We have a number of parameters in that model, many of which are not used in a given run. Paraml addresses the following pain points we had:</p><ul><li>Parameters often weren&#39;t formally defined/described anywhere - some had comments, some were hopefully named idiomatically. This caused issues onboarding new people to using the model.</li><li>Parameters were statically defined/hard coded, but we often wanted them to be dynamic.</li><li>Parameters needed to be filled out/defined by non-technical researchers: users shouldn&#39;t need to know how to code to create a parameter file.</li><li>Parameters need to have specific validation (e.g. a probability should be between 0 and 1, only <code>a</code> or <code>b</code> are expected values for parameter <code>y</code>). This was typically a run time failure - sometimes silent, sometimes explosive.</li><li>If a user isn&#39;t using a feature of the model, they shouldn&#39;t have to worry about/carry around its parameters.</li><li>Reproducibility of the run is key - must be able to re-run the model with the same params.</li><li>We needed to be able to create common settings which described a specific world the model runs in and let users use those, but also override parameters as they needed for their run of the model.</li></ul><p>How Paraml addresses these:</p><ul><li>Parameter definitions require defaults</li><li>Can add inline descriptions of parameters</li><li>A small type system allows validation of params, as well as flexibility to define interfaces for params</li><li>Parameter files only need to fill in what they want different from the defaults</li><li>Can save off the fully computed params, which can then be re-used at a later date</li><li>Can layer different parameter files, allowing more complex defaults and re-use of common scenarios</li></ul><h2 id="Getting-Started"><a class="docs-heading-anchor" href="#Getting-Started">Getting Started</a><a id="Getting-Started-1"></a><a class="docs-heading-anchor-permalink" href="#Getting-Started" title="Permalink"></a></h2><h3 id="Installation"><a class="docs-heading-anchor" href="#Installation">Installation</a><a id="Installation-1"></a><a class="docs-heading-anchor-permalink" href="#Installation" title="Permalink"></a></h3><pre><code class="language-julia">] add Paraml</code></pre><h3 id="Running-Paraml"><a class="docs-heading-anchor" href="#Running-Paraml">Running Paraml</a><a id="Running-Paraml-1"></a><a class="docs-heading-anchor-permalink" href="#Running-Paraml" title="Permalink"></a></h3><p>The entrypoint for running Paraml is <code>Paraml.create_params</code>.  This takes the parameter definitions, parameter files, and some options and returns a dictionary of the validated and computed parameters.</p><p><strong>Args:</strong></p><ul><li><code>def_path</code>: A yaml file or directory of yaml files containing the parameter definitions (see <a href="#Parameter-Definition">Parameter Definition</a>).</li><li><code>param_paths...</code>: The remaining args are interpreted as parameter files.  They will be merged in order (last merged value prevails).</li><li><code>out_path</code>: Optional, if passed, save the computed parameters as a yaml to this location.</li><li><code>error_on_unused</code>: Optional, if <code>True</code> throw an exception if there are parameters in <code>param_paths</code> that do not have a corresponding definition in the <code>def_path</code> definitions.</li></ul><p><strong>Returns:</strong></p><ul><li>A dictionary representing the parsed parameters.</li></ul><p><strong>Example usage:</strong></p><pre><code class="language-julia">using Paraml
+
+def_path = &quot;my/params/dir&quot; # directory of the params definition files
+base_params = &quot;base/params.yaml&quot; # file location of the first params
+setting_param = &quot;settings/my_setting&quot; # directory of the second params files
+intervention_params = &quot;intervention/params&quot; # directory of the third params files
+out_path = &quot;./params.yml&quot; # location to save computed params to
+
+params = create_params(
+  def_path,
+  base_params,
+  setting_params,
+  intervention_params;
+  out_path,
+  error_on_unused=true # if parameters are passed, but don&#39;t exist in the definition file, error
+)</code></pre><h2 id="Parameter-Definition"><a class="docs-heading-anchor" href="#Parameter-Definition">Parameter Definition</a><a id="Parameter-Definition-1"></a><a class="docs-heading-anchor-permalink" href="#Parameter-Definition" title="Permalink"></a></h2><p>The parameter definition language (PDL) provides expressions for defining input types, creation of types for the target application, and simple validation of input values.  The PDL itself is YAML and can be defined either in one file or a directory of yaml files. There can be multiple root keys in the parameter definition to namespace parameters by topic, and parameter definitions can be deeply nested for further organization of the params.  Only the <code>classes</code> key at the root of the definitions has special meaning (see <a href="#Using-Classes">Using Classes</a>).</p><p><strong>An example params definition:</strong></p><pre><code class="language-yml"># classes is a special parameter key that allows the params defined as sub-keys
+# to be used in definitions for other sections
+classes:
+  animals:
+    type: definition
+    description: Animals included in model
+    fields:
+      goes:
+        type: any
+        description: What noise does the animal make?
+        default: oink
+      is_mammal:
+        type: boolean
+        description: Is this animal a mammal
+        default: false
+      friends_with:
+        type: keys
+        description: What animals does this animal befriend
+    default:
+      cat:
+        goes: meow
+        is_mammal: true
+        friends_with:
+          - cat
+          - dog
+      dog:
+        goes: woof
+        is_mammal: true
+        friends_with:
+          - dog
+          - turtle
+          - cat
+      turtle:
+        goes: gurgle
+        friends_with:
+          - dog
+          - turtle
+  locations:
+    type: array
+    description: Where do the animals live?
+    default:
+      - barn
+      - ocean
+    values:
+      - barn
+      - ocean
+      - sky
+      - woods
+
+# demographics is another root-level parameter, which facets off of the values in classes
+# then has parameter definitions for each of those combinations
+demographics:
+  type: sub-dict
+  description: Parameters controlling population class level probabilities and behaviors
+  keys:
+    - animals
+    - locations
+  default:
+    num:
+      type: int
+      default: 0
+      description: Number of animals of this type at this location
+    prob_happy:
+      type: float
+      default: 1.0
+      description: Probability an animal is happy
+      min: 0.0
+      max: 1.0
+    flag: # parameter definitions can be nested in intermediate keys to group related items
+      color:
+        type: enum
+        default: blue
+        description: What&#39;s the color is the flag of this animal/location combo
+        values:
+          - blue
+          - indigo
+          - cyan
+      name:
+        type: any
+        default: animal land
+        description: What is the name of this animal/location combo&#39;s flag
+
+# neighbors is another root-level parameter
+neighbors:
+  type: definition
+  description: Definition of an edge (relationship) between two locations
+  fields:
+    location_1:
+      type: enum
+      default: barn
+      class: locations
+    location_2:
+      type: enum
+      default: sky
+      class: locations
+    distance:
+      type: float
+      default: 0
+      min: 0
+  default:
+    edge_default:
+      location_1: barn
+      location_2: sky
+      distance: 1000
+</code></pre><p><strong>An example of parameters for the definition above</strong></p><pre><code class="language-yml">classes:
+  animals:
+    pig: # doesn&#39;t need a `goes` key as the default is oink and that is appropriate
+      is_mammal: true
+      friends_with:
+        - pig
+    fish: # fish don&#39;t need to specify `is_mammal` as false as that is the default
+      goes: glugglug
+      friends_with:
+        - fish
+    wolf:
+      goes: ooooooooo
+      is_mammal: true
+      friends_with:
+        - pig
+  locations:
+    - ocean
+    - woods
+    - barn
+
+# the calculated params will fill in the default values for combinations of
+# animals/colors/parameters that aren&#39;t specified below
+demographics:
+  pig:
+    barn:
+      num: 20
+      flag:
+        color: cyan
+        name: piney porcines
+  wolf:
+    woods:
+      num: 1
+      prob_happy: 0.8
+      flag:
+        name: running solo
+  fish:
+    ocean:
+      num: 1000001
+      prob_happy: 0.4
+      flag:
+        color: indigo
+        name: cool school
+
+# we&#39;re defining a edges in a graph in this example, the names are labels for human readability only
+neighbors:
+  woodsy_barn:
+    location_1: woods
+    location_2: barn
+    distance: 1
+  woodsy_ocean:
+    location_1: woods
+    location_2: ocean
+    distance: 3
+  barn_ocean:
+    location_1: barn
+    location_2: ocean
+    distance: 4</code></pre><p>Parameters are defined as key value pairs (typically nested).  There are some reserved keys that allow for definition of a parameter item, but otherwise a key in the parameter definition is interpreted as an expected key in the parameters.</p><p>The reserved keys used for defining parameters are:</p><ul><li><code>type</code></li><li><code>default</code></li><li><code>description</code></li><li><code>min</code></li><li><code>max</code></li><li><code>values</code></li><li><code>fields</code></li></ul><p>Specifically, if the <code>default</code> key is present in a yaml object, then that object will be interpreted as a parameter definition.  The other keys are used in that definition</p><p>For example, in the below <code>type</code> is used as a parameter key, which is allowed (though perhaps not encouraged for readability reasons) as <code>default</code> is not a key at the same level of <code>type</code>.  The second usage of <code>type</code> is interpreted as the definition of <code>type</code> (the key) being an <code>int</code>.</p><pre><code class="language-yml">a:
+  type:
+    type: int
+    default: 0
+    description: the type of a</code></pre><p><code>classes</code> is also reserved as a root key (see <a href="#Using-Classes">using classes</a> below)</p><h3 id="Required-Keys"><a class="docs-heading-anchor" href="#Required-Keys">Required Keys</a><a id="Required-Keys-1"></a><a class="docs-heading-anchor-permalink" href="#Required-Keys" title="Permalink"></a></h3><p>Every parameter item must have the <code>type</code>, and <code>default</code> keys (<code>description</code> highly encouraged, but not required).</p><p>See <a href="#Types">Types</a> for more information on the types and how they interact with the other keys.</p><p>The <code>default</code> key should be a valid value given the rest of the definition.  The <code>default</code> key can include parameter definitions within it.  This is common with <code>sub-dict</code> param definitions.</p><p>The <code>description</code> is a free text field to provide context for the parameter item.  This can also be used to generate documentation (no automated support at this time - see <a href="https://github.com/marshall-lab/titan-params-app">TITAN&#39;s params app</a> as an example).</p><h3 id="Types"><a class="docs-heading-anchor" href="#Types">Types</a><a id="Types-1"></a><a class="docs-heading-anchor-permalink" href="#Types" title="Permalink"></a></h3><p>The <code>type</code> of a parameter definition dictates which other fields are required/used when parsing the definition.</p><p>The types supported by Paraml are:</p><ul><li><a href="#int"><code>int</code></a></li><li><a href="#float"><code>float</code></a></li><li><a href="#boolean"><code>boolean</code></a></li><li><a href="#array"><code>array</code></a></li><li><a href="#enum"><code>enum</code></a></li><li><a href="#any"><code>any</code></a></li><li><a href="#bin"><code>bin</code></a></li><li><a href="#sub-dict"><code>sub-dict</code></a></li><li><a href="#definition"><code>definition</code></a></li><li><a href="#keys"><code>keys</code></a></li></ul><h4 id="int"><a class="docs-heading-anchor" href="#int"><code>int</code></a><a id="int-1"></a><a class="docs-heading-anchor-permalink" href="#int" title="Permalink"></a></h4><p>The value of the parameter is expected to be an integer.</p><p>Required keys:</p><ul><li>None</li></ul><p>Optional keys:</p><ul><li><code>min</code> - the minimum value (inclusive) this parameter can take</li><li><code>max</code> - the maximum value (inclusive) this parameter can take</li></ul><p>Example definition:</p><pre><code class="language-yml">fav_num:
+  type: int
+  default: 12
+  description: a is your favorite 3-or-fewer-digit number
+  min: -999
+  max: 999</code></pre><p>Example usage:</p><pre><code class="language-yml">fav_num: 13</code></pre><h4 id="float"><a class="docs-heading-anchor" href="#float"><code>float</code></a><a id="float-1"></a><a class="docs-heading-anchor-permalink" href="#float" title="Permalink"></a></h4><p>The value of the parameter is expected to be a floating point number</p><p>Required keys:</p><ul><li>None</li></ul><p>Optional keys:</p><ul><li><code>min</code> - the minimum value (inclusive) this parameter can take</li><li><code>max</code> - the maximum value (inclusive) this parameter can take</li></ul><p>Example definition:</p><pre><code class="language-yml">heads_prob:
+  type: float
+  default: 0.5
+  description: the probability heads is flipped
+  min: 0.0
+  max: 1.0</code></pre><p>Example usage:</p><pre><code class="language-yml">heads_prob: 0.75</code></pre><h4 id="boolean"><a class="docs-heading-anchor" href="#boolean"><code>boolean</code></a><a id="boolean-1"></a><a class="docs-heading-anchor-permalink" href="#boolean" title="Permalink"></a></h4><p>The value of the parameter is expected to be a true/false value</p><p>Required keys:</p><ul><li>None</li></ul><p>Optional keys:</p><ul><li>None</li></ul><p>Example definition:</p><pre><code class="language-yml">use_feature:
+  type: boolean
+  description: whether or not to use this feature
+  default: false</code></pre><p>Example usage:</p><pre><code class="language-yml">use_feature: true</code></pre><h4 id="array"><a class="docs-heading-anchor" href="#array"><code>array</code></a><a id="array-1"></a><a class="docs-heading-anchor-permalink" href="#array" title="Permalink"></a></h4><p>The value of the parameter is expected to be an array of values selected from the defined list.</p><p>Required keys:</p><ul><li><code>values</code> - either a list of strings that the parameter can take, or the name of a class whose values can be used</li></ul><p>Optional keys:</p><ul><li>None</li></ul><p>Example definition:</p><pre><code class="language-yml">locations:
+  type: array
+  description: Where do the animals go?
+  default:
+    - barn
+    - ocean
+  values:
+    - barn
+    - ocean
+    - sky
+    - woods</code></pre><p>Example usage:</p><pre><code class="language-yml">locations:
+  - sky
+  - ocean</code></pre><h4 id="enum"><a class="docs-heading-anchor" href="#enum"><code>enum</code></a><a id="enum-1"></a><a class="docs-heading-anchor-permalink" href="#enum" title="Permalink"></a></h4><p>The value of the parameter is expected to be a single value selected from the defined list.</p><p>Required keys:</p><ul><li><code>values</code> - either a list of strings that the parameter can take, or the name of a class whose values can be used</li></ul><p>Optional keys:</p><ul><li>None</li></ul><p>Example definition:</p><pre><code class="language-yml">classes:
+  my_classes:
+    type: array
+    description: which class my params has
+    default:
+      - a
+      - b
+    values:
+      - a
+      - b
+      - c
+
+affected_class:
+  type: enum
+  default: a
+  description: which class is affected by this feature
+  values: my_classes</code></pre><p>Example usage:</p><pre><code class="language-yml">my_classes:
+  - b
+  - c
+
+affected_class: c</code></pre><h4 id="any"><a class="docs-heading-anchor" href="#any"><code>any</code></a><a id="any-1"></a><a class="docs-heading-anchor-permalink" href="#any" title="Permalink"></a></h4><p>The value of the parameter can take on any value and will not be validated.</p><p>Required keys:</p><ul><li>None</li></ul><p>Optional keys:</p><ul><li>None</li></ul><p>Example definition:</p><pre><code class="language-yml">name:
+  type: any
+  description: what is your name?
+  default: your name here</code></pre><p>Example usage:</p><pre><code class="language-yml">name: Paraml</code></pre><h4 id="bin"><a class="docs-heading-anchor" href="#bin"><code>bin</code></a><a id="bin-1"></a><a class="docs-heading-anchor-permalink" href="#bin" title="Permalink"></a></h4><p>Binned (integer) keys with set value fields.</p><p>Required keys:</p><ul><li><code>fields</code> - parameter definitions for each required field in the binned items.  Because the sub-fields of a bin are required, no default can be provided.</li></ul><p>Optional keys:</p><ul><li>None</li></ul><p>Example definition:</p><pre><code class="language-yml">bins:
+  type: bin
+  description: Binned probabilities of frequencies
+  fields:
+    prob:
+      type: float
+      min: 0.0
+      max: 1.0
+    min:
+      type: int
+      min: 0
+    max:
+      type: int
+      min: 0
+  default:
+    1:
+      prob: 0.585
+      min: 1
+      max: 6
+    2:
+      prob: 0.701
+      min: 7
+      max: 12
+    3:
+      prob: 0.822
+      min: 13
+      max: 24</code></pre><p>Example usage:</p><pre><code class="language-yml">bins:
+  1:
+    prob: 0.5
+    min: 0
+    max: 10
+  2:
+    prob: 0.9
+    min: 11
+    max: 20</code></pre><h4 id="sub-dict"><a class="docs-heading-anchor" href="#sub-dict"><code>sub-dict</code></a><a id="sub-dict-1"></a><a class="docs-heading-anchor-permalink" href="#sub-dict" title="Permalink"></a></h4><p>Build a set of params for each key combination listed.  Requires use of <code>classes</code> root key.  The default should contain parameter definition items.  Can facet on an arbitrary number of classes.</p><p>Required keys:</p><ul><li><code>keys</code> - which params under the <code>classes</code> root key should be sub-dict&#39;ed off of</li></ul><p>Optional keys:</p><ul><li>None</li></ul><p>Example definition:</p><pre><code class="language-yml">classes:
+  my_classes:
+    type: array
+    description: which class my params has
+    default:
+      - a
+      - b
+    values:
+      - a
+      - b
+      - c
+
+demographics:
+  type: sub-dict
+  description: parameters defining characteristics of each class
+  keys:
+    - my_classes
+  default:
+    num:
+      type: int
+      default: 0
+      description: number of agents in the class</code></pre><p>Example usage:</p><pre><code class="language-yml">demographics:
+  a:
+    num: 10
+  b:
+    num: 20</code></pre><h4 id="definition"><a class="docs-heading-anchor" href="#definition"><code>definition</code></a><a id="definition-1"></a><a class="docs-heading-anchor-permalink" href="#definition" title="Permalink"></a></h4><p>Define an item with the given interface.</p><p>Required keys:</p><ul><li><code>fields</code> - the fields defining the interface for each defined item.  Each field is a param definition item.</li></ul><p>Optional keys:</p><ul><li>None</li></ul><p>Example definition:</p><pre><code class="language-yml">animals:
+  type: definition
+  description: Animals included in model
+  fields:
+    goes:
+      type: any
+      description: What noise does the animal make?
+      default: oink
+    is_mammal:
+      type: boolean
+      description: Is this animal a mammal
+      default: false
+    friends_with:
+      type: keys
+      desciption: What animals does this animal befriend
+  default:
+    cat:
+      goes: meow
+      is_mammal: true
+      friends_with:
+        - cat
+        - dog
+    dog:
+      goes: woof
+      is_mammal: true
+      friends_with:
+        - dog
+        - cat</code></pre><p>Example usage:</p><pre><code class="language-yml">animals:
+  sheep:
+    goes: bah
+    is_mammal: true
+    friends_with:
+      - pig
+      - sheep
+  pig:
+    is_mammal: true
+  fish:
+    goes: glugglug
+    friends_with:
+      - fish</code></pre><h4 id="keys"><a class="docs-heading-anchor" href="#keys"><code>keys</code></a><a id="keys-1"></a><a class="docs-heading-anchor-permalink" href="#keys" title="Permalink"></a></h4><p>Within the field definitions of a <code>definition</code> type, the <code>keys</code> type acts like an <code>array</code> type, but with the values limited to the keys that are ultimately definied in the params.</p><p>Required keys:</p><ul><li>None</li></ul><p>Optional keys:</p><ul><li>None</li></ul><p>Example definition:</p><pre><code class="language-yml">animals:
+  type: definition
+  description: Animals included in model
+  fields:
+    goes:
+      type: any
+      description: What noise does the animal make?
+      default: oink
+    is_mammal:
+      type: boolean
+      description: Is this animal a mammal
+      default: false
+    friends_with:
+      type: keys
+      desciption: What animals does this animal befriend
+  default:
+    cat:
+      goes: meow
+      is_mammal: true
+      friends_with:
+        - cat
+        - dog
+    dog:
+      goes: woof
+      is_mammal: true
+      friends_with:
+        - dog
+        - cat</code></pre><p>Example usage:</p><pre><code class="language-yml">animals:
+  sheep:
+    goes: bah
+    is_mammal: true
+    friends_with:
+      - pig
+      - sheep
+  pig:
+    is_mammal: true
+  fish:
+    goes: glugglug
+    friends_with:
+      - fish</code></pre><h3 id="Using-Classes"><a class="docs-heading-anchor" href="#Using-Classes">Using Classes</a><a id="Using-Classes-1"></a><a class="docs-heading-anchor-permalink" href="#Using-Classes" title="Permalink"></a></h3><p>The <code>classes</code> key as a root key of the parameter definitions takes on special meaning.  The parameters chosen in this section can be used to determine acceptable values in other sections of the params (via <code>enum</code> and <code>array</code> types), or to determine what params need to be created (via <code>sub-dict</code> type).</p><h2 id="API"><a class="docs-heading-anchor" href="#API">API</a><a id="API-1"></a><a class="docs-heading-anchor-permalink" href="#API" title="Permalink"></a></h2><ul><li><a href="#Paraml.build_yaml-Tuple{AbstractString}"><code>Paraml.build_yaml</code></a></li><li><a href="#Paraml.check_item-Tuple{Any,Any,Any}"><code>Paraml.check_item</code></a></li><li><a href="#Paraml.create_params-Tuple{AbstractString,Vararg{Any,N} where N}"><code>Paraml.create_params</code></a></li><li><a href="#Paraml.get_bin_int-Tuple{Int64}"><code>Paraml.get_bin_int</code></a></li><li><a href="#Paraml.get_bins-NTuple{5,Any}"><code>Paraml.get_bins</code></a></li><li><a href="#Paraml.get_defn-NTuple{5,Any}"><code>Paraml.get_defn</code></a></li><li><a href="#Paraml.get_item-NTuple{5,Any}"><code>Paraml.get_item</code></a></li><li><a href="#Paraml.headtail-Tuple{Any,Vararg{Any,N} where N}"><code>Paraml.headtail</code></a></li><li><a href="#Paraml.keys_or_vals-Tuple{AbstractDict}"><code>Paraml.keys_or_vals</code></a></li><li><a href="#Paraml.merge_rec-Tuple{AbstractDict,AbstractDict}"><code>Paraml.merge_rec</code></a></li><li><a href="#Paraml.parse_classes-Tuple{AbstractDict,AbstractDict}"><code>Paraml.parse_classes</code></a></li><li><a href="#Paraml.parse_params-Tuple{AbstractDict,AbstractDict}"><code>Paraml.parse_params</code></a></li><li><a href="#Paraml.parse_subdict-NTuple{5,Any}"><code>Paraml.parse_subdict</code></a></li><li><a href="#Paraml.warn_unused_params-Tuple{AbstractDict,AbstractDict}"><code>Paraml.warn_unused_params</code></a></li></ul><article class="docstring"><header><a class="docstring-binding" id="Paraml.build_yaml-Tuple{AbstractString}" href="#Paraml.build_yaml-Tuple{AbstractString}"><code>Paraml.build_yaml</code></a> — <span class="docstring-category">Method</span></header><section><div><p>Read in a yaml or folder of yamls into a dictionary.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/pph-collective/Paraml.jl/blob/989a8640c9b63d84c90ec836eb1410ced8cb9809/src/utils.jl#LL25-L27">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Paraml.check_item-Tuple{Any,Any,Any}" href="#Paraml.check_item-Tuple{Any,Any,Any}"><code>Paraml.check_item</code></a> — <span class="docstring-category">Method</span></header><section><div><p>Checks if an item meets the requirements of the field&#39;s definition.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/pph-collective/Paraml.jl/blob/989a8640c9b63d84c90ec836eb1410ced8cb9809/src/check.jl#LL46-L48">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Paraml.create_params-Tuple{AbstractString,Vararg{Any,N} where N}" href="#Paraml.create_params-Tuple{AbstractString,Vararg{Any,N} where N}"><code>Paraml.create_params</code></a> — <span class="docstring-category">Method</span></header><section><div><pre><code class="language-julia">create_params(
+    defn_path::AbstractString,
+    param_paths...;
+    error_on_unused::Bool = false,
+    out_path::AbstractString = &quot;&quot;,
+)</code></pre><p>Entry function - given the path to the parameter definitions and files, parse and create a params dictionary.</p><p>The defn<em>path and param</em>paths can be either a single yaml file, or a directory containing yaml files.</p><p><strong>Arguments</strong></p><ul><li><code>defn_path</code>: path to the parameter definitions</li><li><code>param_paths...</code>: paths to parameter files or directories. The files will be merged in the passed order so that item &#39;a&#39; in the first params will be overwritten by item &#39;a&#39; in the second params.</li><li><code>out_path</code>: path to directory where computed params will be saved if passed</li><li><code>error_on_unused</code>: throw a hard error if there are unused parameters, otherwise warnings are only printed</li></ul><p><strong>Returns</strong></p><ul><li>dictionary with computed/validated model paramters with defaults filled in where needed</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/pph-collective/Paraml.jl/blob/989a8640c9b63d84c90ec836eb1410ced8cb9809/src/Paraml.jl#LL9-L29">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Paraml.get_bin_int-Tuple{Int64}" href="#Paraml.get_bin_int-Tuple{Int64}"><code>Paraml.get_bin_int</code></a> — <span class="docstring-category">Method</span></header><section><div><p>Get the bin key as an integer, or error if it is not convertable.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/pph-collective/Paraml.jl/blob/989a8640c9b63d84c90ec836eb1410ced8cb9809/src/parse.jl#LL14-L16">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Paraml.get_bins-NTuple{5,Any}" href="#Paraml.get_bins-NTuple{5,Any}"><code>Paraml.get_bins</code></a> — <span class="docstring-category">Method</span></header><section><div><p>Get and validate a type == bin definition</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/pph-collective/Paraml.jl/blob/989a8640c9b63d84c90ec836eb1410ced8cb9809/src/parse.jl#LL26-L28">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Paraml.get_defn-NTuple{5,Any}" href="#Paraml.get_defn-NTuple{5,Any}"><code>Paraml.get_defn</code></a> — <span class="docstring-category">Method</span></header><section><div><p>Get and validate a type == definition definition</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/pph-collective/Paraml.jl/blob/989a8640c9b63d84c90ec836eb1410ced8cb9809/src/parse.jl#LL54-L56">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Paraml.get_item-NTuple{5,Any}" href="#Paraml.get_item-NTuple{5,Any}"><code>Paraml.get_item</code></a> — <span class="docstring-category">Method</span></header><section><div><p>Get and check item from the params, falling back on the definitions default.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/pph-collective/Paraml.jl/blob/989a8640c9b63d84c90ec836eb1410ced8cb9809/src/parse.jl#LL1-L3">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Paraml.headtail-Tuple{Any,Vararg{Any,N} where N}" href="#Paraml.headtail-Tuple{Any,Vararg{Any,N} where N}"><code>Paraml.headtail</code></a> — <span class="docstring-category">Method</span></header><section><div><p>Get the head and tail tuples from args</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/pph-collective/Paraml.jl/blob/989a8640c9b63d84c90ec836eb1410ced8cb9809/src/utils.jl#LL45-L47">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Paraml.keys_or_vals-Tuple{AbstractDict}" href="#Paraml.keys_or_vals-Tuple{AbstractDict}"><code>Paraml.keys_or_vals</code></a> — <span class="docstring-category">Method</span></header><section><div><p>Get the keys of a dict, or the items in a list.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/pph-collective/Paraml.jl/blob/989a8640c9b63d84c90ec836eb1410ced8cb9809/src/utils.jl#LL84-L86">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Paraml.merge_rec-Tuple{AbstractDict,AbstractDict}" href="#Paraml.merge_rec-Tuple{AbstractDict,AbstractDict}"><code>Paraml.merge_rec</code></a> — <span class="docstring-category">Method</span></header><section><div><p>Recursively merge two nested dictionaries</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/pph-collective/Paraml.jl/blob/989a8640c9b63d84c90ec836eb1410ced8cb9809/src/utils.jl#LL1-L3">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Paraml.parse_classes-Tuple{AbstractDict,AbstractDict}" href="#Paraml.parse_classes-Tuple{AbstractDict,AbstractDict}"><code>Paraml.parse_classes</code></a> — <span class="docstring-category">Method</span></header><section><div><p>Parse the classes definition first as it is needed in parsing the full params.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/pph-collective/Paraml.jl/blob/989a8640c9b63d84c90ec836eb1410ced8cb9809/src/parse.jl#LL161-L163">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Paraml.parse_params-Tuple{AbstractDict,AbstractDict}" href="#Paraml.parse_params-Tuple{AbstractDict,AbstractDict}"><code>Paraml.parse_params</code></a> — <span class="docstring-category">Method</span></header><section><div><p>Recursively parse the passed params, using the definitions to validate and provide defaults.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/pph-collective/Paraml.jl/blob/989a8640c9b63d84c90ec836eb1410ced8cb9809/src/parse.jl#LL81-L84">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Paraml.parse_subdict-NTuple{5,Any}" href="#Paraml.parse_subdict-NTuple{5,Any}"><code>Paraml.parse_subdict</code></a> — <span class="docstring-category">Method</span></header><section><div><p>Parse a type == sub-dict definition</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/pph-collective/Paraml.jl/blob/989a8640c9b63d84c90ec836eb1410ced8cb9809/src/parse.jl#LL140-L142">source</a></section></article><article class="docstring"><header><a class="docstring-binding" id="Paraml.warn_unused_params-Tuple{AbstractDict,AbstractDict}" href="#Paraml.warn_unused_params-Tuple{AbstractDict,AbstractDict}"><code>Paraml.warn_unused_params</code></a> — <span class="docstring-category">Method</span></header><section><div><p>Compare the original params to what was parsed and print warnings for any original params that are unused in the final parsed parasms.</p></div><a class="docs-sourcelink" target="_blank" href="https://github.com/pph-collective/Paraml.jl/blob/989a8640c9b63d84c90ec836eb1410ced8cb9809/src/utils.jl#LL51-L54">source</a></section></article></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Monday 8 March 2021 22:36">Monday 8 March 2021</span>. Using Julia version 1.5.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
